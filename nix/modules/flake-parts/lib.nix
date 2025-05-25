@@ -1,8 +1,13 @@
-{ self, inputs, config, lib, ... }:
+{ self, inputs, config, lib, pkgs, ... }:
 let
   specialArgsFor = rec {
     common = {
       flake = { inherit self inputs config; };
+    } // {
+      unstable-pkgs = import inputs.nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
     };
     nixos = common;
     darwin = common // {
